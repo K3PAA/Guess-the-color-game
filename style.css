@@ -54,14 +54,7 @@ li button{
     padding: 2rem 0;
 }
 
-.color-container{
-       background-color: rgb(32, 123, 84);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 2rem 0;
-    font-size: 1.5rem;
-}
+
 .color-container h4{
     margin-right: 20px;
     font-weight: 100;
@@ -74,4 +67,24 @@ li button{
 
 .reset:hover{
     color: black;
+}
+
+.ending-screen{
+    display: flex;
+    margin: 0 auto;
+    width: 400px;
+    height: 200px;
+    background-color: whitesmoke;
+    color: black;
+    justify-content: center;
+    align-items: center;
+}
+
+.color-container{
+    background-color: rgb(32, 123, 84);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 0;
+    font-size: 1.5rem;
 }

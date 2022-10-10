@@ -1,22 +1,27 @@
 const randomColor = document.querySelector('.random-color')
 let nums = []
 
-const colors = []
+let colors = []
 const scoreDisplay = document.querySelector('.score')
 const timeLeftDisplay = document.querySelector('.timeLeft')
-const reset = document.querySelector('.reset')
+const resetBtn = document.querySelector('.reset')
 const easy = document.querySelector('.easy')
 const hard = document.querySelector('.hard')
+const end = document.querySelector('.color-container')
 const grid = document.querySelector('.colors-container')
 
 let points = 0
 let timeLeft = 30
+let time
 let goodAnswer
 let amount
 let random = []
+let div
 
 function checkForDifficulty(){
-let div
+    grid.innerHTML = ''
+    colors = []
+
     if(easy.className.includes('active')){
         amount = 4
         for(let i=1; i<=amount; i++){
@@ -27,6 +32,7 @@ let div
             colors.push(div)
         }
         randomColors(amount)
+        goodColor()
     }
      if(hard.className.includes('active')){
         amount = 8
@@ -38,16 +44,16 @@ let div
             colors.push(div)
         }
         randomColors(amount)
+        goodColor()
     }
-
 }
 
-checkForDifficulty()
+
 
 function randomColors(amount){
     for(let i=0; i<amount; i++){
-    for(let i=0; i<3; i++){
-        random[i] = Math.floor(Math.random() * 255)
+        for(let i=0; i<3; i++){
+            random[i] = Math.floor(Math.random() * 255)
         }   
         colors[i].style.background = `rgb(${random[0]}, ${random[1]}, ${random[2]})`
     }
@@ -60,31 +66,34 @@ function randomColors(amount){
 
     let answerColor = colors[Math.floor(Math.random() * amount)]
     answerColor.style.background = `rgb(${nums[0]},${nums[1]},${nums[2]})`
+    
     goodAnswer = answerColor.id
     console.log(goodAnswer)
 }
 
-colors.forEach(color => {
-    color.addEventListener('click', ()=>{
-        if(color.id == goodAnswer){
-            points ++
-            scoreDisplay.innerHTML = points
-        }
-        randomColors(amount)
+const goodColor = () => {
+    colors.forEach(color => {
+        color.addEventListener('click', ()=>{
+            if(color.id == goodAnswer){
+                points ++
+                scoreDisplay.innerHTML = points
+            }
+            randomColors(amount)
+        })
     })
-})
+}
 
 
-reset.addEventListener('click', ()=>{
-        points = 0
-        timeLeft = 30
-        
-        randomColors(amount)
+
+
+resetBtn.addEventListener('click', ()=>{
+    reset()
 })
     
 easy.addEventListener('click', (e)=> {
     const curr = e.currentTarget.className
-
+    
+    reset()
     if(curr.includes('active')){
         easy.classList.remove('active')
         hard.classList.add('active')
@@ -97,7 +106,8 @@ easy.addEventListener('click', (e)=> {
 
 hard.addEventListener('click', (e)=> {
     const curr = e.currentTarget.className
-
+    
+    reset()
     if(curr.includes('active')){
         hard.classList.remove('active')
         easy.classList.add('active')
@@ -109,3 +119,34 @@ hard.addEventListener('click', (e)=> {
     checkForDifficulty()
 })
 
+checkForDifficulty()
+
+
+
+// Reseting game
+const reset = () =>{
+    points = 0
+    timeLeft = 30
+
+    timeLeftDisplay.innerHTML = timeLeft
+    scoreDisplay.innerHTML = points
+    
+    checkForDifficulty()
+}
+
+
+//Timer
+const countdown = () =>{
+    if(timeLeft != 0){
+        timeLeft--
+        timeLeftDisplay.textContent = timeLeft
+    }else{
+        time = clearInterval( countdown, 1000)
+        time = undefined
+        grid.innerHTML = `<div>
+        <h1 class="ending-screen">Your final score is ${points}</h1>
+        </div>`
+    }
+}
+
+time = setInterval( countdown, 1000)
